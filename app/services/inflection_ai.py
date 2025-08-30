@@ -132,11 +132,11 @@ Ensure the output is ONLY the JSON object, nothing else."""
 
         report = ReportCreate(
             report_type=query,
-            query_parameters=json.dumps({"query": query}),
-            analysis_results=json.dumps(analysis_results),
-            predictions=json.dumps(ai_response.predictions),
-            citations=json.dumps(ai_response.citations),
-            confidence_scores=json.dumps({"overall": ai_response.confidence_score}),
+            query_parameters={"query": query},
+            analysis_results=analysis_results,
+            predictions=ai_response.predictions,
+            citations=ai_response.citations,
+            confidence_scores={"overall": ai_response.confidence_score},
             ai_model_version=self.model
         )
         logger.info("AI analysis process completed successfully.")
