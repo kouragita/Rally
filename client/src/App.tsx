@@ -1,195 +1,172 @@
-import { useState, useEffect } from 'react';
-import * as api from './services/api';
-
-interface Ecosystem {
-  id: number;
-  name: string;
-  type: string;
-  description: string;
-}
-
-interface Species {
-  id: number;
-  scientific_name: string;
-  common_name: string;
-}
-
-interface Report {
-  id: number;
-  report_type: string;
-  query_parameters: any;
-  analysis_results: any;
-  predictions: any;
-  citations: any;
-  confidence_scores: any;
-  ai_model_version: string;
-  generated_at: string;
-}
+import React, { useState } from 'react';
+import { Layout } from './components/layout/Layout';
+import { AnalysisForm } from './components/forms/AnalysisForm';
+import { AnalysisQuery, AnalysisResult } from './services/types';
+import './App.css';
 
 function App() {
-  const [ecosystems, setEcosystems] = useState<Ecosystem[]>([]);
-  const [species, setSpecies] = useState<Species[]>([]);
-  const [selectedEcosystem, setSelectedEcosystem] = useState<string>('');
-  const [selectedSpecies, setSelectedSpecies] = useState<string>('');
-  const [query, setQuery] = useState<string>('');
-  const [report, setReport] = useState<Report | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [results, setResults] = useState<AnalysisResult | null>(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const ecoData = await api.getEcosystems();
-        setEcosystems(ecoData);
-        const speciesData = await api.getSpecies();
-        setSpecies(speciesData);
-      } catch (err) {
-        setError('Failed to fetch initial data.');
-        console.error(err);
-      }
-    };
-    fetchData();
-  }, []);
-
-  const handleAnalysis = async (targetType: 'ecosystem' | 'species') => {
-    setLoading(true);
-    setError(null);
-    setReport(null);
+  const handleAnalysisSubmit = async (query: AnalysisQuery) => {
+    setIsLoading(true);
     try {
-      let targetName = '';
-      let targetId: number | undefined;
-
-      if (targetType === 'ecosystem') {
-        targetName = selectedEcosystem;
-        const eco = ecosystems.find(e => e.name === selectedEcosystem);
-        targetId = eco?.id;
-      } else {
-        targetName = selectedSpecies;
-        const sp = species.find(s => s.scientific_name === selectedSpecies);
-        targetId = sp?.id;
-      }
-
-      if (!targetName) {
-        setError('Please select a target.');
-        setLoading(false);
-        return;
-      }
-
-      const analysisPayload = {
-        query,
-        target_type: targetType,
-        target_name: targetName,
-        target_id: targetId,
+      // TODO: Replace with your actual API call
+      console.log('Submitting analysis:', query);
+      
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      // Mock result - replace with actual API response
+      const mockResult: AnalysisResult = {
+        id: '1',
+        query: query.query,
+        ecosystem: query.ecosystem || '',
+        species: query.species,
+        metrics: {
+          temperatureChange: 2.3,
+          precipitationChange: -15,
+          speciesAtRisk: 47
+        },
+        insights: [
+          'Arctic temperatures rising faster than global average',
+          'Permafrost melting threatens ecosystem stability',
+          'Species migration patterns shifting northward'
+        ],
+        charts: {
+          temperature: [
+            { name: '2020', value: 1.1 },
+            { name: '2021', value: 1.4 },
+            { name: '2022', value: 1.8 },
+            { name: '2023', value: 2.1 },
+            { name: '2024', value: 2.3 }
+          ],
+          population: [
+            { name: 'Polar Bear', value: -23 },
+            { name: 'Arctic Fox', value: -18 },
+            { name: 'Caribou', value: -31 }
+          ]
+        },
+        timestamp: new Date().toISOString()
       };
-
-      const { report_id } = await api.triggerAnalysis(analysisPayload);
-      const fetchedReport = await api.getReport(report_id);
-      setReport(fetchedReport);
-    } catch (err) {
-      setError('Failed to generate report.');
-      console.error(err);
+      
+      setResults(mockResult);
+    } catch (error) {
+      console.error('Analysis failed:', error);
+      // Handle error state
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-      <h1 className="text-4xl font-bold text-center text-gray-800 mb-8">Climate & Wildlife AI Dashboard</h1>
-
-      <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md mb-8">
-        <h2 className="text-2xl font-semibold text-gray-700 mb-4">Run New Analysis</h2>
-        
-        <div className="mb-4">
-          <label htmlFor="query" className="block text-gray-700 text-sm font-bold mb-2">Query:</label>
-          <input
-            type="text"
-            id="query"
-            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            placeholder="e.g., Main threats to Arctic Terrestrial Systems"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
+    <Layout>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        {/* Analysis Form - Takes 2/3 width */}
+        <div className="lg:col-span-2">
+          <AnalysisForm 
+            onSubmit={handleAnalysisSubmit}
+            isLoading={isLoading}
           />
-        </div>
-
-        <div className="mb-4">
-          <label htmlFor="ecosystem-select" className="block text-gray-700 text-sm font-bold mb-2">Select Ecosystem:</label>
-          <select
-            id="ecosystem-select"
-            className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            value={selectedEcosystem}
-            onChange={(e) => setSelectedEcosystem(e.target.value)}
-          >
-            <option value="">-- Select an Ecosystem --</option>
-            {ecosystems.map((eco) => (
-              <option key={eco.id} value={eco.name}>{eco.name}</option>
-            ))}
-          </select>
-          <button
-            onClick={() => handleAnalysis('ecosystem')}
-            className="mt-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            disabled={loading}
-          >
-            {loading ? 'Analyzing...' : 'Analyze Ecosystem'}
-          </button>
-        </div>
-
-        <div className="mb-4">
-          <label htmlFor="species-select" className="block text-gray-700 text-sm font-bold mb-2">Select Species:</label>
-          <select
-            id="species-select"
-            className="shadow border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-            value={selectedSpecies}
-            onChange={(e) => setSelectedSpecies(e.target.value)}
-          >
-            <option value="">-- Select a Species --</option>
-            {species.map((sp) => (
-              <option key={sp.id} value={sp.scientific_name}>{sp.scientific_name} ({sp.common_name})</option>
-            ))}
-          </select>
-          <button
-            onClick={() => handleAnalysis('species')}
-            className="mt-2 bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            disabled={loading}
-          >
-            {loading ? 'Analyzing...' : 'Analyze Species'}
-          </button>
-        </div>
-
-        {error && <p className="text-red-500 text-center mb-4">Error: {error}</p>}
-      </div>
-
-      {report && (
-        <div className="max-w-4xl mx-auto bg-white p-6 rounded-lg shadow-md">
-          <h2 className="text-2xl font-semibold text-gray-700 mb-4">Analysis Report (ID: {report.id})</h2>
-          <p className="text-gray-600 mb-2">**Query:** {report.report_type}</p>
-          <p className="text-gray-600 mb-2">**AI Model:** {report.ai_model_version}</p>
-          <p className="text-gray-600 mb-2">**Confidence:** {(report.confidence_scores?.overall * 100).toFixed(2)}%</p>
           
-          <h3 className="text-xl font-semibold text-gray-700 mt-4 mb-2">Summary:</h3>
-          <p className="text-gray-600 mb-4">{report.analysis_results?.raw_text}</p>
-
-          {report.predictions && Object.keys(report.predictions).length > 0 && (
-            <div className="mt-4">
-              <h3 className="text-xl font-semibold text-gray-700 mb-2">Predictions:</h3>
-              {Object.entries(report.predictions).map(([key, value]) => (
-                <p key={key} className="text-gray-600 mb-1">**{key}:** {value}</p>
-              ))}
-            </div>
-          )}
-
-          {report.citations && Object.keys(report.citations).length > 0 && (
-            <div className="mt-4">
-              <h3 className="text-xl font-semibold text-gray-700 mb-2">Citations:</h3>
-              {Object.entries(report.citations).map(([key, value]) => (
-                <p key={key} className="text-gray-600 mb-1">**{key}:** {value}</p>
-              ))}
+          {/* Results will be displayed here */}
+          {results && !isLoading && (
+            <div className="mt-8">
+              <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <h3 className="text-lg font-semibold text-gray-800 mb-4">
+                  Analysis Results for: "{results.query}"
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                  <div className="bg-red-50 p-4 rounded-lg">
+                    <div className="text-2xl font-bold text-red-600">
+                      +{results.metrics.temperatureChange}°C
+                    </div>
+                    <div className="text-sm text-gray-600">Temperature Change</div>
+                  </div>
+                  <div className="bg-blue-50 p-4 rounded-lg">
+                    <div className="text-2xl font-bold text-blue-600">
+                      {results.metrics.precipitationChange}%
+                    </div>
+                    <div className="text-sm text-gray-600">Precipitation Change</div>
+                  </div>
+                  <div className="bg-amber-50 p-4 rounded-lg">
+                    <div className="text-2xl font-bold text-amber-600">
+                      {results.metrics.speciesAtRisk}
+                    </div>
+                    <div className="text-sm text-gray-600">Species at Risk</div>
+                  </div>
+                </div>
+                
+                <div className="space-y-2">
+                  <h4 className="font-semibold text-gray-800">Key Insights:</h4>
+                  {results.insights.map((insight, index) => (
+                    <div key={index} className="flex items-start space-x-2">
+                      <span className="text-blue-500 mt-1">•</span>
+                      <span className="text-gray-700">{insight}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           )}
         </div>
-      )}
-    </div>
+
+        {/* Sidebar - Takes 1/3 width */}
+        <div className="space-y-6">
+          <QuickStatsCard />
+          <RecentAnalysesCard />
+        </div>
+      </div>
+    </Layout>
   );
 }
+
+// Quick Stats Component
+const QuickStatsCard: React.FC = () => (
+  <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+    <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+      <span className="mr-2">📊</span>
+      Global Climate Stats
+    </h3>
+    <div className="space-y-3">
+      <div className="flex justify-between items-center">
+        <span className="text-gray-600">Global Temp Rise</span>
+        <span className="font-semibold text-red-600">+1.1°C</span>
+      </div>
+      <div className="flex justify-between items-center">
+        <span className="text-gray-600">CO₂ Levels</span>
+        <span className="font-semibold text-orange-600">421 ppm</span>
+      </div>
+      <div className="flex justify-between items-center">
+        <span className="text-gray-600">Species Threatened</span>
+        <span className="font-semibold text-red-600">41,415</span>
+      </div>
+    </div>
+  </div>
+);
+
+// Recent Analyses Component
+const RecentAnalysesCard: React.FC = () => (
+  <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+    <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+      <span className="mr-2">📋</span>
+      Recent Analyses
+    </h3>
+    <div className="space-y-3">
+      <div className="p-3 bg-gray-50 rounded-lg">
+        <div className="font-medium text-gray-800 text-sm">Arctic Ice Loss Impact</div>
+        <div className="text-xs text-gray-500">2 hours ago</div>
+      </div>
+      <div className="p-3 bg-gray-50 rounded-lg">
+        <div className="font-medium text-gray-800 text-sm">Coral Reef Bleaching</div>
+        <div className="text-xs text-gray-500">1 day ago</div>
+      </div>
+      <div className="p-3 bg-gray-50 rounded-lg">
+        <div className="font-medium text-gray-800 text-sm">Rainforest Deforestation</div>
+        <div className="text-xs text-gray-500">3 days ago</div>
+      </div>
+    </div>
+  </div>
+);
 
 export default App;
