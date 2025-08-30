@@ -7,9 +7,10 @@ class Settings(BaseSettings):
     API_V1_STR: str = "/api/v1"
     DATABASE_URL: str = "sqlite:///./data/app.db" # Changed database path
     
-    # Service API Keys
+    # Service API Keys & Settings
     INFLECTION_AI_API_KEY: str | None = None
     INFLECTION_AI_BASE_URL: str = "https://api.inflection.ai"
+    INFLECTION_AI_MODEL: str = "Pi-3.1"
     NOAA_API_KEY: str | None = None
     NASA_API_KEY: str | None = None
 

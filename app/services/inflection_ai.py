@@ -1,10 +1,14 @@
 import httpx
 import logging
 import json
+import random
 from typing import List, Dict, Any
+
+from pydantic import ValidationError
 
 from app.core.config import settings
 from app.schemas.report import ReportCreate
+from app.schemas.analysis import AIResponse
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -13,8 +17,9 @@ class InflectionAIService:
     def __init__(self):
         self.api_key = settings.INFLECTION_AI_API_KEY
         self.api_url = f"{settings.INFLECTION_AI_BASE_URL}/v1/chat/completions"
+        self.model = settings.INFLECTION_AI_MODEL
 
-    async def _call_ai_api(self, messages: List[Dict[str, Any]], model: str = "Pi-3.1", max_tokens: int = 2048, temperature: float = 0.4) -> str:
+    async def _call_ai_api(self, messages: List[Dict[str, Any]], temperature: float) -> str:
         if not self.api_key:
             raise ValueError("Inflection AI API key is not set.")
 
@@ -24,15 +29,15 @@ class InflectionAIService:
         }
 
         payload = {
-            "model": model,
+            "model": self.model,
             "messages": messages,
-            "max_tokens": max_tokens,
+            "max_tokens": 2048,
             "temperature": temperature,
         }
 
         async with httpx.AsyncClient() as client:
             try:
-                response = await client.post(self.api_url, json=payload, headers=headers, timeout=60.0)
+                response = await client.post(self.api_url, json=payload, headers=headers, timeout=90.0)
                 response.raise_for_status()
                 ai_response = response.json()
                 return ai_response['choices'][0]['message']['content']
@@ -42,6 +47,14 @@ class InflectionAIService:
             except Exception as e:
                 logger.error(f"An error occurred during AI call: {e}", exc_info=True)
                 raise
+
+    def _get_data_sample(self, data: List[Dict[str, Any]], sample_size: int = 20) -> str:
+        """Takes a random sample of the data to keep the prompt concise."""
+        if len(data) <= sample_size:
+            sample = data
+        else:
+            sample = random.sample(data, sample_size)
+        return "\n".join([str(d) for d in sample])
 
     async def analyze(
         self,
@@ -63,8 +76,8 @@ class InflectionAIService:
             "Do NOT output JSON in this response. Provide a natural language report."
         )
 
-        climate_data_str = "\n".join([str(d) for d in climate_data[:5]]) # Sample first 5 for prompt
-        wildlife_data_str = "\n".join([str(d) for d in wildlife_data[:5]]) # Sample first 5 for prompt
+        climate_data_str = self._get_data_sample(climate_data)
+        wildlife_data_str = self._get_data_sample(wildlife_data)
 
         user_prompt_analysis = (
             f"User Query: {query}\n\n"
@@ -79,21 +92,18 @@ class InflectionAIService:
         ]
 
         logger.info("Making first AI call for natural language analysis.")
-        natural_language_content = await self._call_ai_api(messages_analysis)
+        natural_language_content = await self._call_ai_api(messages_analysis, temperature=0.4)
         logger.info("Received natural language analysis from AI.")
 
         # --- Step 2: Get structured JSON from AI based on natural language content ---
         system_prompt_json_extraction = (
-            "You are a data extraction assistant. Your task is to parse the provided natural language report "
-            "and extract specific information into a JSON object. "
-            "The JSON object MUST have the following keys: "
-            "\"summary\": string, "
-            "\"key_insights\": list of strings, "
-            "\"predictions\": dict, "
-            "\"citations\": dict, "
-            "\"confidence_score\": float (between 0.0 and 1.0). "
-            "If a field cannot be extracted, use an empty string, empty list, empty dict, or 0.0 as appropriate. "
-            "Ensure the output is ONLY the JSON object, nothing else."
+            f"""You are a data extraction assistant. Your task is to parse the provided natural language report and extract specific information into a valid JSON object that conforms to the following Pydantic schema:
+
+```json
+{AIResponse.model_json_schema()}
+```
+
+Ensure the output is ONLY the JSON object, nothing else."""
         )
 
         user_prompt_json_extraction = f"Natural Language Report:\n{natural_language_content}\n\nExtract the information into a JSON object."
@@ -104,43 +114,30 @@ class InflectionAIService:
         ]
 
         logger.info("Making second AI call for JSON extraction.")
-        json_content_str = await self._call_ai_api(messages_json_extraction, temperature=0.1) # Lower temp for strict JSON
+        json_content_str = await self._call_ai_api(messages_json_extraction, temperature=0.1)
         logger.info("Received JSON extraction from AI.")
 
-        # --- Step 3: Parse JSON and create ReportCreate schema ---
+        # --- Step 3: Parse and validate JSON using the Pydantic model ---
         try:
-            parsed_json = json.loads(json_content_str)
-        except json.JSONDecodeError as e:
-            logger.error(f"Failed to parse AI's JSON response: {e}. Raw response: {json_content_str}", exc_info=True)
-            # Fallback: if JSON parsing fails, use raw text and default empty values
-            parsed_json = {
-                "summary": "AI response could not be fully parsed.",
-                "key_insights": [],
-                "predictions": {},
-                "citations": {},
-                "confidence_score": 0.0,
-            }
+            # Clean the response to ensure it is valid JSON
+            cleaned_json_str = json_content_str.strip().replace('\n', '').replace('```json', '').replace('```', '')
+            ai_response = AIResponse.model_validate_json(cleaned_json_str)
+        except (ValidationError, json.JSONDecodeError) as e:
+            logger.error(f"Failed to validate AI's JSON response: {e}. Raw response: {json_content_str}", exc_info=True)
+            ai_response = AIResponse() # Use a default empty response
             # Store the raw text in analysis_results for debugging
-            parsed_json["analysis_results"] = {"raw_text": natural_language_content, "parsing_error": str(e)}
+            analysis_results = {"raw_text": natural_language_content, "parsing_error": str(e)}
         else:
-            # If parsing successful, ensure all expected keys are present
-            parsed_json.setdefault("summary", "")
-            parsed_json.setdefault("key_insights", [])
-            parsed_json.setdefault("predictions", {})
-            parsed_json.setdefault("citations", {})
-            parsed_json.setdefault("confidence_score", 0.0)
-            # Store the original natural language content as well
-            parsed_json["analysis_results"] = {"raw_text": natural_language_content}
-
+            analysis_results = {"raw_text": natural_language_content}
 
         report = ReportCreate(
             report_type=query,
             query_parameters=json.dumps({"query": query}),
-            analysis_results=json.dumps(parsed_json.get("analysis_results", {"raw_text": natural_language_content})),
-            predictions=json.dumps(parsed_json.get("predictions", {})),
-            citations=json.dumps(parsed_json.get("citations", {})),
-            confidence_scores=json.dumps({"overall": parsed_json.get("confidence_score", 0.0)}),
-            ai_model_version="Pi-3.1" # Assuming Pi-3.1 for both calls
+            analysis_results=json.dumps(analysis_results),
+            predictions=json.dumps(ai_response.predictions),
+            citations=json.dumps(ai_response.citations),
+            confidence_scores=json.dumps({"overall": ai_response.confidence_score}),
+            ai_model_version=self.model
         )
         logger.info("AI analysis process completed successfully.")
         return report

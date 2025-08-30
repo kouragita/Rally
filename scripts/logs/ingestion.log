@@ -1,0 +1,22 @@
+2025-08-30 10:51:36,060 - NASAIngester - INFO - Starting NASA climate data ingestion
+2025-08-30 10:51:36,061 - NASAIngester - INFO - Downloading NASA dataset: global_land_ocean
+2025-08-30 10:51:39,407 - NASAIngester - INFO - Staged 17470 records for climate_data table.
+2025-08-30 10:51:39,446 - NASAIngester - INFO - NASA ingestion completed
+2025-08-30 10:51:39,449 - GBIFIngester - INFO - Starting GBIF ingestion for 2 species.
+2025-08-30 10:51:39,449 - GBIFIngester - INFO - --- Processing: Ursus maritimus ---
+2025-08-30 10:51:51,827 - GBIFIngester - INFO - Skipped 28 rows for species ID 1 due to missing or invalid data.
+2025-08-30 10:51:51,836 - GBIFIngester - INFO - Staged 172 records for wildlife_data table.
+2025-08-30 10:51:51,837 - GBIFIngester - INFO - --- Processing: Panthera leo ---
+2025-08-30 10:52:05,509 - GBIFIngester - INFO - Skipped 200 rows for species ID 2 due to missing or invalid data.
+2025-08-30 10:52:05,511 - GBIFIngester - INFO - No processable occurrences found for Panthera leo.
+2025-08-30 10:52:05,511 - GBIFIngester - INFO - Committing all changes to the database.
+2025-08-30 10:52:05,537 - GBIFIngester - INFO - GBIF ingestion completed.
+2025-08-30 10:52:05,543 - NOAAIngester - INFO - Starting NOAA climate data ingestion for stations ['GHCND:USW00014733'] from 2022-2024
+2025-08-30 10:52:05,543 - NOAAIngester - INFO - Processing station: GHCND:USW00014733 (Ecosystem: 5)...
+2025-08-30 10:52:05,543 - NOAAIngester - INFO -   - Processing year 2022...
+2025-08-30 10:52:10,839 - NOAAIngester - INFO - Staged 1430 records for climate_data table.
+2025-08-30 10:52:11,071 - NOAAIngester - INFO -   - Processing year 2023...
+2025-08-30 10:52:16,605 - NOAAIngester - INFO - Staged 1403 records for climate_data table.
+2025-08-30 10:52:16,835 - NOAAIngester - INFO -   - Processing year 2024...
+2025-08-30 10:52:21,930 - NOAAIngester - INFO - Staged 1435 records for climate_data table.
+2025-08-30 10:52:22,167 - NOAAIngester - INFO - NOAA ingestion completed.

@@ -5,12 +5,8 @@ import logging
 from typing import Optional, Dict, Any, Type
 from datetime import datetime
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
-
-# Add project root to sys.path to allow importing from app
-import sys
-from pathlib import Path
-sys.path.append(str(Path(__file__).resolve().parents[1])) # Adjusted parents index
+from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.inspection import inspect
 
 from app.core.config import settings
 from app.db.base_class import Base
@@ -25,11 +21,13 @@ class BaseDataIngester:
 
     def setup_logging(self):
         """Setup logging for ingestion process"""
+        log_dir = "scripts/logs"
+        os.makedirs(log_dir, exist_ok=True)
         logging.basicConfig(
             level=logging.INFO,
             format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
             handlers=[
-                logging.FileHandler('scripts/ingestion.log'), # Adjusted path
+                logging.FileHandler(os.path.join(log_dir, 'ingestion.log')),
                 logging.StreamHandler()
             ]
         )
@@ -50,17 +48,39 @@ class BaseDataIngester:
             self.logger.error(f"Failed to download {url}: {e}")
             return False
 
-    def save_to_database(self, data: pd.DataFrame, model: Type[Base]):
-        """Save processed data to database by mapping DataFrame rows to the SQLAlchemy model."""
-        db = self.SessionLocal()
-        try:
-            records = data.to_dict(orient='records')
-            db.bulk_insert_mappings(model, records)
-            db.commit()
-            self.logger.info(f"Saved {len(records)} records to {model.__tablename__} table.")
-        except Exception as e:
-            self.logger.error(f"Failed to save to database: {e}")
-            db.rollback()
-            raise
-        finally:
-            db.close()
+    def save_to_database(self, data: pd.DataFrame, model: Type[Base], db: Optional[Session] = None):
+        """
+        Save processed data to the database.
+        If a db session is provided, it uses it; otherwise, it creates a new one.
+        """
+        if db:
+            self._save_with_session(data, model, db)
+        else:
+            db_session = self.SessionLocal()
+            try:
+                self._save_with_session(data, model, db_session)
+                db_session.commit()
+            except Exception as e:
+                self.logger.error(f"Failed to save to database for {model.__tablename__}: {e}")
+                db_session.rollback()
+                raise
+            finally:
+                db_session.close()
+
+    def _save_with_session(self, data: pd.DataFrame, model: Type[Base], db: Session):
+        """Helper method to save data using a provided session."""
+        mapper = inspect(model)
+        model_columns = {c.key for c in mapper.attrs}
+        df_columns = set(data.columns)
+
+        if not df_columns.issubset(model_columns):
+            extra_cols = df_columns - model_columns
+            self.logger.error(
+                f"DataFrame columns do not match {model.__tablename__} model. "
+                f"Extra columns in DataFrame: {extra_cols}"
+            )
+            raise ValueError(f"DataFrame contains columns not present in the {model.__tablename__} model: {extra_cols}")
+
+        records = data.to_dict(orient='records')
+        db.bulk_insert_mappings(model, records)
+        self.logger.info(f"Staged {len(records)} records for {model.__tablename__} table.")
