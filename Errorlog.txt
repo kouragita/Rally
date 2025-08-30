@@ -1,0 +1,130 @@
+(env) code_sensei@DESKTOP-H7A3P5B:~/dev/Rally$ python scripts/test_ai_analysis.py
+Starting AI Analysis Test Script...
+Ensure your backend server is running at http://127.0.0.1:8000
+You can also check the API documentation at http://127.0.0.1:8000/docs
+
+--- Testing Ecosystem Analysis (Aquatic) ---
+Ecosystem Analysis Request Successful:
+{
+  "report_id": 11,
+  "message": "Analysis complete and report generated."
+}
+
+Waiting for 5 seconds for report generation...
+
+--- Fetching Report ID: 11 ---
+Report Retrieved Successfully:
+{
+  "report_type": "What are the main climate change impacts on pelagic marine systems, and how do these changes affect aquatic species? Provide current percentages of impact and suggest predictive analyses for mitigation.",
+  "query_parameters": {
+    "query": "What are the main climate change impacts on pelagic marine systems, and how do these changes affect aquatic species? Provide current percentages of impact and suggest predictive analyses for mitigation."
+  },
+  "analysis_results": {
+    "raw_text": "**Summary**\n\nClimate change is having significant impacts on pelagic marine systems, affecting the distribution, abundance, and behavior of aquatic species. Rising ocean temperatures, acidification, and changes in ocean circulation are altering the habitats and food sources of marine species, leading to declines in biodiversity and ecosystem resilience. Current data suggests that temperature anomalies in pelagic marine systems have increased by 0.5\u00b0C over the past century, with a projected increase of 1.5\u00b0C by 2050. These changes are expected to have cascading effects on marine ecosystems, including shifts in species composition, reduced fisheries productivity, and increased vulnerability to invasive species.\n\n**Key Insights and Patterns**\n\n1. **Temperature Anomalies**: The provided data shows a trend of increasing temperature anomalies in pelagic marine systems over the past century, with a mean increase of 0.5\u00b0C.\n2. **Ocean Acidification**: Rising CO2 levels are causing ocean acidification, which is affecting the ability of marine organisms to build calcium carbonate shells and skeletons.\n3. **Changes in Ocean Circulation**: Shifts in ocean circulation patterns are altering the distribution of nutrients and heat, impacting the productivity of marine ecosystems.\n4. **Species Distribution**: Many marine species are shifting their ranges poleward or to deeper waters in response to changing ocean conditions, leading to changes in community composition.\n5. **Fisheries Productivity**: Changes in ocean temperature and circulation are affecting the productivity of fisheries, with some species experiencing declines in abundance and distribution.\n\n**Predictive Analysis**\n\nUsing historical data and climate models, we predict that pelagic marine systems will continue to experience warming, acidification, and changes in circulation patterns over the next few decades. By 2050, we expect:\n\n1. **Temperature Anomalies**: A further increase of 1.5\u00b0C in temperature anomalies, leading to more frequent and severe heatwaves and coral bleaching events.\n2. **Ocean Acidification**: A decrease in pH levels by 0.3 units, impacting the ability of marine organisms to build calcium carbonate shells and skeletons.\n3. **Changes in Ocean Circulation**: Continued shifts in ocean circulation patterns, leading to changes in nutrient availability and heat distribution.\n4. **Species Distribution**: Further shifts in species ranges, leading to changes in community composition and ecosystem function.\n5. **Fisheries Productivity**: Continued declines in fisheries productivity, with some species experiencing local extinctions.\n\n**Actionable Recommendations**\n\n1. **Reduce Greenhouse Gas Emissions**: Immediate and sustained reductions in greenhouse gas emissions are necessary to mitigate the impacts of climate change on pelagic marine systems.\n2. **Establish Marine Protected Areas**: Protecting critical habitats and ecosystems through the establishment of marine protected areas can help to maintain biodiversity and ecosystem resilience.\n3. **Promote Sustainable Fisheries Management**: Implementing sustainable fisheries management practices can help to maintain fisheries productivity and reduce the impacts of climate change on marine ecosystems.\n4. **Support Climate-Smart Conservation**: Developing and implementing climate-smart conservation strategies can help to protect marine ecosystems and species from the impacts of climate change.\n5. **Monitor and Adapt**: Continual monitoring of climate change impacts and adaptation of management strategies will be necessary to address the changing conditions in pelagic marine systems.\n\n**Confidence Score**\n\nBased on the available data and climate models, we assign a confidence score of 0.8 to our analysis. While there is some uncertainty in the exact magnitude and timing of climate change impacts, the overall trends and patterns are well-supported by historical data and scientific research."
+  },
+  "predictions": {
+    "Temperature Anomalies": "A further increase of 1.5\u00b0C in temperature anomalies, leading to more frequent and severe heatwaves and coral bleaching events.",
+    "Ocean Acidification": "A decrease in pH levels by 0.3 units, impacting the ability of marine organisms to build calcium carbonate shells and skeletons.",
+    "Changes in Ocean Circulation": "Continued shifts in ocean circulation patterns, leading to changes in nutrient availability and heat distribution.",
+    "Species Distribution": "Further shifts in species ranges, leading to changes in community composition and ecosystem function.",
+    "Fisheries Productivity": "Continued declines in fisheries productivity, with some species experiencing local extinctions."
+  },
+  "citations": {
+    "Reduce Greenhouse Gas Emissions": "Immediate and sustained reductions in greenhouse gas emissions are necessary to mitigate the impacts of climate change on pelagic marine systems.",
+    "Establish Marine Protected Areas": "Protecting critical habitats and ecosystems through the establishment of marine protected areas can help to maintain biodiversity and ecosystem resilience.",
+    "Promote Sustainable Fisheries Management": "Implementing sustainable fisheries management practices can help to maintain fisheries productivity and reduce the impacts of climate change on marine ecosystems.",
+    "Support Climate-Smart Conservation": "Developing and implementing climate-smart conservation strategies can help to protect marine ecosystems and species from the impacts of climate change.",
+    "Monitor and Adapt": "Continual monitoring of climate change impacts and adaptation of management strategies will be necessary to address the changing conditions in pelagic marine systems."
+  },
+  "confidence_scores": {
+    "overall": 0.8
+  },
+  "ai_model_version": "Pi-3.1",
+  "id": 11,
+  "generated_at": "2025-08-30T12:31:27"
+}
+/home/code_sensei/dev/Rally/scripts/test_ai_analysis.py:17: DeprecationWarning: Substituting font arial by core font helvetica - This is deprecated since v2.7.8, and will soon be removed
+  self.set_font('Arial', 'B', 15)
+/home/code_sensei/dev/Rally/scripts/test_ai_analysis.py:18: DeprecationWarning: The parameter "ln" is deprecated since v2.5.2. Instead of ln=1 use new_x=XPos.LMARGIN, new_y=YPos.NEXT.
+  self.cell(0, 10, 'AI Analysis Report', 0, 1, 'C')
+/home/code_sensei/dev/Rally/scripts/test_ai_analysis.py:91: DeprecationWarning: Substituting font arial by core font helvetica - This is deprecated since v2.7.8, and will soon be removed
+  pdf.set_font('Arial', '', 12)
+/home/code_sensei/dev/Rally/scripts/test_ai_analysis.py:96: DeprecationWarning: Substituting font arial by core font helvetica - This is deprecated since v2.7.8, and will soon be removed
+  pdf.set_font('Arial', 'B', 14)
+/home/code_sensei/dev/Rally/scripts/test_ai_analysis.py:97: DeprecationWarning: The parameter "ln" is deprecated since v2.5.2. Instead of ln=1 use new_x=XPos.LMARGIN, new_y=YPos.NEXT.
+  pdf.cell(0, 10, f"Report ID: {report_data.get('id', 'N/A')}", 0, 1)
+/home/code_sensei/dev/Rally/scripts/test_ai_analysis.py:100: DeprecationWarning: Substituting font arial by core font helvetica - This is deprecated since v2.7.8, and will soon be removed
+  pdf.set_font('Arial', 'B', 12)
+/home/code_sensei/dev/Rally/scripts/test_ai_analysis.py:101: DeprecationWarning: The parameter "ln" is deprecated since v2.5.2. Instead of ln=1 use new_x=XPos.LMARGIN, new_y=YPos.NEXT.
+  pdf.cell(0, 10, 'Query Parameters:', 0, 1)
+/home/code_sensei/dev/Rally/scripts/test_ai_analysis.py:102: DeprecationWarning: Substituting font arial by core font helvetica - This is deprecated since v2.7.8, and will soon be removed
+  pdf.set_font('Arial', '', 12)
+/home/code_sensei/dev/Rally/scripts/test_ai_analysis.py:108: DeprecationWarning: Substituting font arial by core font helvetica - This is deprecated since v2.7.8, and will soon be removed
+  pdf.set_font('Arial', 'B', 12)
+/home/code_sensei/dev/Rally/scripts/test_ai_analysis.py:109: DeprecationWarning: The parameter "ln" is deprecated since v2.5.2. Instead of ln=1 use new_x=XPos.LMARGIN, new_y=YPos.NEXT.
+  pdf.cell(0, 10, 'Metrics:', 0, 1)
+/home/code_sensei/dev/Rally/scripts/test_ai_analysis.py:110: DeprecationWarning: Substituting font arial by core font helvetica - This is deprecated since v2.7.8, and will soon be removed
+  pdf.set_font('Arial', '', 12)
+/home/code_sensei/dev/Rally/scripts/test_ai_analysis.py:117: DeprecationWarning: Substituting font arial by core font helvetica - This is deprecated since v2.7.8, and will soon be removed
+  pdf.set_font('Arial', 'B', 12)
+/home/code_sensei/dev/Rally/scripts/test_ai_analysis.py:118: DeprecationWarning: The parameter "ln" is deprecated since v2.5.2. Instead of ln=1 use new_x=XPos.LMARGIN, new_y=YPos.NEXT.
+  pdf.cell(0, 10, 'Key Insights:', 0, 1)
+/home/code_sensei/dev/Rally/scripts/test_ai_analysis.py:119: DeprecationWarning: Substituting font arial by core font helvetica - This is deprecated since v2.7.8, and will soon be removed
+  pdf.set_font('Arial', '', 12)
+/home/code_sensei/dev/Rally/scripts/test_ai_analysis.py:129: DeprecationWarning: Substituting font arial by core font helvetica - This is deprecated since v2.7.8, and will soon be removed
+  pdf.set_font('Arial', 'B', 12)
+/home/code_sensei/dev/Rally/scripts/test_ai_analysis.py:130: DeprecationWarning: The parameter "ln" is deprecated since v2.5.2. Instead of ln=1 use new_x=XPos.LMARGIN, new_y=YPos.NEXT.
+  pdf.cell(0, 10, 'Charts Data:', 0, 1)
+/home/code_sensei/dev/Rally/scripts/test_ai_analysis.py:131: DeprecationWarning: Substituting font arial by core font helvetica - This is deprecated since v2.7.8, and will soon be removed
+  pdf.set_font('Arial', '', 12)
+/home/code_sensei/dev/Rally/scripts/test_ai_analysis.py:148: DeprecationWarning: Substituting font arial by core font helvetica - This is deprecated since v2.7.8, and will soon be removed
+  pdf.set_font('Arial', 'B', 12)
+/home/code_sensei/dev/Rally/scripts/test_ai_analysis.py:149: DeprecationWarning: The parameter "ln" is deprecated since v2.5.2. Instead of ln=1 use new_x=XPos.LMARGIN, new_y=YPos.NEXT.
+  pdf.cell(0, 10, 'Raw AI Analysis Text:', 0, 1)
+/home/code_sensei/dev/Rally/scripts/test_ai_analysis.py:150: DeprecationWarning: Substituting font arial by core font helvetica - This is deprecated since v2.7.8, and will soon be removed
+  pdf.set_font('Arial', '', 12)
+/home/code_sensei/dev/Rally/scripts/test_ai_analysis.py:23: DeprecationWarning: Substituting font arial by core font helvetica - This is deprecated since v2.7.8, and will soon be removed
+  self.set_font('Arial', 'I', 8)
+/home/code_sensei/dev/Rally/scripts/test_ai_analysis.py:24: DeprecationWarning: The parameter "ln" is deprecated since v2.5.2. Instead of ln=0 use new_x=XPos.RIGHT, new_y=YPos.TOP.
+  self.cell(0, 10, f'Page {self.page_no()}/{{nb}}', 0, 0, 'C')
+Report saved to reports/analysis_report_ecosystem_11.pdf
+
+==================================================
+
+
+--- Testing Species Analysis (Polar Bear) ---
+Species Analysis Request Successful:
+{
+  "report_id": 12,
+  "message": "Analysis complete and report generated."
+}
+
+Waiting for 5 seconds for report generation...
+
+--- Fetching Report ID: 12 ---
+Report Retrieved Successfully:
+{
+  "report_type": "Assess the current endangerment level of the Polar Bear. What are the primary causes of its population decline, including climate-related disruptions? Provide current percentages of decline and a predictive analysis for its future.",
+  "query_parameters": {
+    "query": "Assess the current endangerment level of the Polar Bear. What are the primary causes of its population decline, including climate-related disruptions? Provide current percentages of decline and a predictive analysis for its future."
+  },
+  "analysis_results": {
+    "raw_text": "**Summary:**\n\nThe polar bear is currently listed as a vulnerable species by the International Union for Conservation of Nature (IUCN). The primary causes of its population decline are climate-related disruptions, particularly the loss of sea ice due to global warming. The decline in sea ice cover has reduced the availability of hunting grounds for polar bears, leading to malnutrition and starvation. Additionally, the melting of sea ice has disrupted the bears' migration patterns, making it more difficult for them to find food and shelter.\n\n**Key Insights and Patterns:**\n\n1. The polar bear population has been declining at a rate of approximately 30% over the past three decades.\n2. The decline in sea ice cover has been accelerating, with a loss of about 13% per decade since the 1980s.\n3. The bears' migration patterns have been disrupted, with some populations moving further north in search of sea ice.\n4. The decline in sea ice cover has also led to an increase in human-bear conflicts, as bears are forced to venture closer to human settlements in search of food.\n\n**Predictive Analysis:**\n\nBased on current trends, it is predicted that the polar bear population will continue to decline, with some estimates suggesting that the species could become extinct by the end of the century. The loss of sea ice cover is expected to continue, with some models predicting that the Arctic could be ice-free in the summer by the 2040s. This would have a devastating impact on the polar bear population, as they rely on sea ice for hunting and breeding.\n\n**Actionable Recommendations:**\n\n1. Reduce greenhouse gas emissions to slow the rate of global warming and sea ice loss.\n2. Protect and conserve polar bear habitats, including sea ice and surrounding ecosystems.\n3. Implement measures to reduce human-bear conflicts, such as relocating bears and educating the public about bear safety.\n4. Support research and monitoring efforts to better understand the impacts of climate change on polar bears and to develop effective conservation strategies.\n\n**Confidence Score:**\n\nThe confidence score for this analysis is 0.8, based on the strength of the evidence and the consistency of the trends observed in the data. However, there is some uncertainty in the predictions, as the impacts of climate change are complex and difficult to model with precision."
+  },
+  "predictions": {
+    "population_decline": "The polar bear population will continue to decline, with some estimates suggesting that the species could become extinct by the end of the century.",
+    "sea_ice_loss": "The loss of sea ice cover is expected to continue, with some models predicting that the Arctic could be ice-free in the summer by the 2040s."
+  },
+  "citations": {
+    "IUCN": "International Union for Conservation of Nature"
+  },
+  "confidence_scores": {
+    "overall": 0.8
+  },
+  "ai_model_version": "Pi-3.1",
+  "id": 12,
+  "generated_at": "2025-08-30T12:33:42"
+}
+Report saved to reports/analysis_report_species_12.pdf
+
+AI Analysis Test Script Finished.

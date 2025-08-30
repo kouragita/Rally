@@ -1,23 +1,32 @@
 import axios from 'axios';
+import { AnalysisQuery, AnalysisResult } from './types';
 
-const API_BASE_URL = 'http://127.0.0.1:8000/api/v1'; // Our FastAPI backend
+const API_BASE_URL = '/api/v1';
 
-export const getEcosystems = async () => {
-  const response = await axios.get(`${API_BASE_URL}/ecosystems/`);
-  return response.data;
-};
+export class ApiService {
+  static async getEcosystems() {
+    const response = await axios.get(`${API_BASE_URL}/ecosystems/`);
+    return response.data;
+  }
 
-export const getSpecies = async () => {
-  const response = await axios.get(`${API_BASE_URL}/species/`);
-  return response.data;
-};
+  static async getSpecies() {
+    const response = await axios.get(`${API_BASE_URL}/species/`);
+    return response.data;
+  }
 
-export const triggerAnalysis = async (payload: { query: string; target_type: string; target_name: string; target_id?: number }) => {
-  const response = await axios.post(`${API_BASE_URL}/analysis/`, payload);
-  return response.data; // Returns { report_id: number, message: string }
-};
+  static async triggerAnalysis(payload: AnalysisQuery): Promise<{ report_id: number; message: string }> {
+    const response = await axios.post(`${API_BASE_URL}/analysis/`, payload);
+    return response.data; // Returns { report_id: number, message: string }
+  }
 
-export const getReport = async (reportId: number) => {
-  const response = await axios.get(`${API_BASE_URL}/reports/${reportId}`);
-  return response.data; // Returns the full report object
-};
+  static async getReport(reportId: number): Promise<AnalysisResult> {
+    const response = await axios.get(`${API_BASE_URL}/reports/${reportId}`);
+    return response.data; // Returns the full report object
+  }
+
+  // Add a placeholder for getRecentAnalyses if needed later
+  static async getRecentAnalyses(): Promise<AnalysisResult[]> {
+    // This endpoint doesn't exist yet in our backend, so we'll return mock data for now
+    return []; 
+  }
+}
