@@ -1,0 +1,27 @@
+2025-08-30 03:27:28,273 - NASAIngester - INFO - Starting NASA climate data ingestion
+2025-08-30 03:27:28,274 - NASAIngester - INFO - Downloading NASA dataset: global_land_ocean
+2025-08-30 03:27:31,531 - NASAIngester - INFO - Saved 1747 records to climate_data table.
+2025-08-30 03:27:31,532 - NASAIngester - INFO - NASA ingestion completed
+2025-08-30 03:27:31,533 - GBIFIngester - INFO - Starting GBIF ingestion for 5 species
+2025-08-30 03:27:31,534 - GBIFIngester - INFO - --- Processing: Ursus maritimus ---
+2025-08-30 03:27:31,553 - GBIFIngester - INFO - Creating new species: Ursus maritimus
+2025-08-30 03:27:46,238 - GBIFIngester - INFO - Saved 200 records to wildlife_data table.
+2025-08-30 03:27:47,240 - GBIFIngester - INFO - --- Processing: Panthera leo ---
+2025-08-30 03:27:47,242 - GBIFIngester - INFO - Creating new species: Panthera leo
+2025-08-30 03:28:05,541 - GBIFIngester - INFO - Saved 200 records to wildlife_data table.
+2025-08-30 03:28:06,543 - GBIFIngester - INFO - --- Processing: Chelonia mydas ---
+2025-08-30 03:28:06,545 - GBIFIngester - INFO - Creating new species: Chelonia mydas
+2025-08-30 03:28:18,114 - GBIFIngester - INFO - Saved 200 records to wildlife_data table.
+2025-08-30 03:28:19,115 - GBIFIngester - INFO - --- Processing: Salmo salar ---
+2025-08-30 03:28:19,118 - GBIFIngester - INFO - Creating new species: Salmo salar
+2025-08-30 03:28:33,573 - GBIFIngester - INFO - Saved 200 records to wildlife_data table.
+2025-08-30 03:28:34,575 - GBIFIngester - INFO - --- Processing: Danaus plexippus ---
+2025-08-30 03:28:34,577 - GBIFIngester - INFO - Creating new species: Danaus plexippus
+2025-08-30 03:28:53,980 - GBIFIngester - INFO - Saved 200 records to wildlife_data table.
+2025-08-30 03:28:54,981 - GBIFIngester - INFO - GBIF ingestion completed
+2025-08-30 03:28:54,987 - NOAAIngester - INFO - Starting NOAA climate data ingestion for 2023-2024
+2025-08-30 03:28:54,987 - NOAAIngester - INFO - Processing year 2023...
+2025-08-30 03:28:59,750 - NOAAIngester - INFO - Saved 1000 records to climate_data table.
+2025-08-30 03:29:00,251 - NOAAIngester - INFO - Processing year 2024...
+2025-08-30 03:29:04,612 - NOAAIngester - INFO - Saved 1000 records to climate_data table.
+2025-08-30 03:29:05,114 - NOAAIngester - INFO - NOAA ingestion completed.
