@@ -1,6 +1,3 @@
-import os
-print(f"[DEBUG] DB file exists at VERY START of env.py: {os.path.exists('/tmp/test.db')}")
-
 import sys
 from pathlib import Path
 from logging.config import fileConfig
@@ -15,9 +12,6 @@ sys.path.append(str(Path(__file__).resolve().parents[1]))
 
 from app.core.config import settings
 from app.db.base_class import Base
-
-print(f"[DEBUG] DB URL from settings: {settings.DATABASE_URL}")
-print(f"[DEBUG] DB file exists AFTER app import: {os.path.exists('/tmp/test.db')}")
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
