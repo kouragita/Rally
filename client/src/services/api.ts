@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { AnalysisQuery, AnalysisResult } from './types';
 
-const API_BASE_URL = 'http://127.0.0.1:8000/api/v1'; // Our FastAPI backend
+const API_BASE_URL = '/api/v1';
 
 export class ApiService {
   static async getEcosystems() {

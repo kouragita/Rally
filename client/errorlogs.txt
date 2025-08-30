@@ -1,0 +1,29 @@
+code_sensei@DESKTOP-H7A3P5B:~/dev/Rally/client$ npm run dev
+
+> client@0.0.0 dev
+> vite
+
+
+  VITE v7.1.3  ready in 553 ms
+
+  ➜  Local:   http://localhost:5173/
+  ➜  Network: use --host to expose
+  ➜  press h + enter to show help
+Error: Cannot apply unknown utility class `border-border`. Are you using CSS modules or similar and missing `@reference`? https://tailwindcss.com/docs/functions-and-directives#reference-directive
+    at onInvalidCandidate (/home/code_sensei/dev/Rally/client/node_modules/tailwindcss/dist/lib.js:18:1332)
+    at ge (/home/code_sensei/dev/Rally/client/node_modules/tailwindcss/dist/lib.js:13:29871)
+    at /home/code_sensei/dev/Rally/client/node_modules/tailwindcss/dist/lib.js:18:373
+    at L (/home/code_sensei/dev/Rally/client/node_modules/tailwindcss/dist/lib.js:3:1656)
+    at je (/home/code_sensei/dev/Rally/client/node_modules/tailwindcss/dist/lib.js:18:172)
+    at yi (/home/code_sensei/dev/Rally/client/node_modules/tailwindcss/dist/lib.js:35:780)
+    at async bi (/home/code_sensei/dev/Rally/client/node_modules/tailwindcss/dist/lib.js:35:1123)
+    at async _r (/home/code_sensei/dev/Rally/client/node_modules/@tailwindcss/node/dist/index.js:10:3384)
+    at async W (/home/code_sensei/dev/Rally/client/node_modules/@tailwindcss/postcss/dist/index.js:10:4048)
+    at async Object.Once (/home/code_sensei/dev/Rally/client/node_modules/@tailwindcss/postcss/dist/index.js:10:4318)
+    at async LazyResult.runAsync (/home/code_sensei/dev/Rally/client/node_modules/postcss/lib/lazy-result.js:293:11)
+    at async runPostCSS (file:///home/code_sensei/dev/Rally/client/node_modules/vite/dist/node/chunks/dep-Bj7gA1-0.js:32378:19)
+    at async compilePostCSS (file:///home/code_sensei/dev/Rally/client/node_modules/vite/dist/node/chunks/dep-Bj7gA1-0.js:32358:17)
+    at async compileCSS (file:///home/code_sensei/dev/Rally/client/node_modules/vite/dist/node/chunks/dep-Bj7gA1-0.js:32289:26)
+    at async TransformPluginContext.handler (file:///home/code_sensei/dev/Rally/client/node_modules/vite/dist/node/chunks/dep-Bj7gA1-0.js:31819:54)
+    at async EnvironmentPluginContainer.transform (file:///home/code_sensei/dev/Rally/client/node_modules/vite/dist/node/chunks/dep-Bj7gA1-0.js:31220:14)
+    at async loadAndTransform (file:///home/code_sensei/dev/Rally/client/node_modules/vite/dist/node/chunks/dep-Bj7gA1-0.js:26307:26)
